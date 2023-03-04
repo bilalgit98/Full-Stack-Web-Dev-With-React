@@ -3,18 +3,22 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-
+import toast from "react-hot-toast";
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
+  let toastPostID: string;
 
   const { mutate } = useMutation(
     async (title: string) => await axios.post("/api/posts/addPost", { title }),
     {
       onError: (error) => {
         console.log(error);
+        toast.error(error?.response?.data.message, { id: toastPostID });
+        setIsDisabled(false);
       },
       onSuccess: (data) => {
+        toast.success("Post Has Succesfully been made 🎉", { id: toastPostID });
         setTitle("");
         setIsDisabled(false);
         console.log(data);
@@ -24,6 +28,7 @@ export default function CreatePost() {
 
   const submitPost = async (e: React.FormEvent) => {
     e.preventDefault();
+    toastPostID = toast.loading("Creating your post!", { id: toastPostID });
     setIsDisabled(true);
     mutate(title);
   };

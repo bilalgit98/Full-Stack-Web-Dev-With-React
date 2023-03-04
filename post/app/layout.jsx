@@ -1,6 +1,7 @@
 import "./globals.css";
 import Nav from "./auth/Nav";
 import QueryWrapper from "./auth/QueryWrapper";
+
 // import { Roboto } from "@next/font/google";
 
 // const roboto = Roboto({
